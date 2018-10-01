@@ -18,6 +18,7 @@ namespace OrchardCore.Users.Drivers
             return Initialize<RegistrationSettings>("RegistrationSettings_Edit", model => {
                 model.UsersCanRegister = section.UsersCanRegister;
                 model.UsersMustValidateEmail = section.UsersMustValidateEmail;
+                model.UsersDefaultRoleAfterRegistration = section.UsersDefaultRoleAfterRegistration;
             }).Location("Content:5").OnGroup(GroupId);
         }
 

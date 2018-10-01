@@ -93,6 +93,11 @@ namespace OrchardCore.Users.Controllers
                 
                 if (user != null)
                 {
+                    if (!string.IsNullOrWhiteSpace(settings.UsersDefaultRoleAfterRegistration))
+                    {
+                        await _userManager.AddToRoleAsync(user, settings.UsersDefaultRoleAfterRegistration);
+                    }
+
                     if (settings.UsersMustValidateEmail)
                     {
                         // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713

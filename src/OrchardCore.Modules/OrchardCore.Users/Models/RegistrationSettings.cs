@@ -4,5 +4,6 @@ namespace OrchardCore.Users.Models
     {
         public bool UsersCanRegister { get; set; }
         public bool UsersMustValidateEmail { get; set; }
+        public string UsersDefaultRoleAfterRegistration { get; set; }
     }
 }
