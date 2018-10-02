@@ -89,15 +89,16 @@ namespace OrchardCore.Users.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = await _userService.CreateUserAsync(new User { UserName = model.UserName, Email = model.Email, EmailConfirmed = !settings.UsersMustValidateEmail, RoleNames = new string[0] }, model.Password, (key, message) => ModelState.AddModelError(key, message)) as User;
-                
+                var user = await _userService.CreateUserAsync(new User
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    EmailConfirmed = !settings.UsersMustValidateEmail,
+                    RoleNames = !string.IsNullOrWhiteSpace(settings.UsersDefaultRoleAfterRegistration) ? new [] {_userManager.NormalizeKey(settings.UsersDefaultRoleAfterRegistration)} : new string[0]
+                }, model.Password, (key, message) => ModelState.AddModelError(key, message)) as User;
+
                 if (user != null)
                 {
-                    if (!string.IsNullOrWhiteSpace(settings.UsersDefaultRoleAfterRegistration))
-                    {
-                        await _userManager.AddToRoleAsync(user, settings.UsersDefaultRoleAfterRegistration);
-                    }
-
                     if (settings.UsersMustValidateEmail)
                     {
                         // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
@@ -128,7 +129,7 @@ namespace OrchardCore.Users.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return  NotFound();
+                return NotFound();
             }
             var result = await _userManager.ConfirmEmailAsync(user, code);
 
